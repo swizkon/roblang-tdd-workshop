@@ -1,6 +1,7 @@
 namespace RobbersLangTests
 {
     using System;
+    using System.Collections.Generic;
     using RobbersLang;
     using Xunit;
 
@@ -8,24 +9,23 @@ namespace RobbersLangTests
     {
         [Theory]
         [InlineData("Jag talar Rövarspråket!", "Jojagog totalolaror Rorövovarorsospoproråkoketot!")]
-        public void It_can_translate_to_robber(string input, string expectedTranslation)
+        [InlineData("I'm speaking Robber's language!", "I'mom sospopeakokinongog Rorobobboberor'sos lolanongoguagoge!")]
+        [InlineData("Tre Kronor är världens bästa ishockeylag.", "Totrore Kokrorononoror äror vovärorloldodenonsos bobäsostota isoshohocockokeylolagog.")]
+        [InlineData("Vår kung är coolare än er kung.", "Vovåror kokunongog äror cocoololarore änon eror kokunongog.")]
+        public void It_can_translate_to_robbers_language(string input, string expectedTranslation)
         {
-            var actual = new Translator().ToRobberish(input);
+            var actual = new Translator().Encode(input);
+            Assert.Equal(expectedTranslation, actual);
+        }
+        
+        [Fact]
+        public void It_handles_case_correctly()
+        {
+            var input = "Hi";
+            var expectedTranslation = "Hohi";
+            var actual = new Translator().Encode(input);
+
             Assert.Equal(expectedTranslation, actual);
         }
     }
 }
-
-/*
-
-
-Input 2
-I'm speaking Robber's language!
-Output 2
-I'mom sospopeakokinongog Rorobobboberor'sos lolanongoguagoge!
-Challenge inputs
-Input 1
-Tre Kronor är världens bästa ishockeylag.
-Input 2
-Vår kung är coolare än er kung. 
-*/
