@@ -7,24 +7,35 @@ namespace RobbersLang
     {
         public static void Main(string[] args)
         {
-            var translator = new Translator();
+            var translateAction = GetTranslateAction(args);
 
-            Func<string, string> action = translator.Encode;
+            var croppedArgs = CropArgs(args);
 
-            if (args.Length > 0 && args[0] == "decode")
-            {
-                action = translator.Decode;
-                args = args.Skip(1).ToArray();
-            }
-
-            if (args.Length > 0 && args[0] == "encode")
-            {
-                args = args.Skip(1).ToArray();
-            }
-
-            var response = action(string.Join(" ", args));
+            var response = translateAction(string.Join(" ", croppedArgs));
 
             System.Console.WriteLine(response);
+        }
+
+        private static string[] CropArgs(string[] args)
+        {
+            if (args == null || args.Length == 0)
+                return args;
+
+            return (args.First() == "decode" || args.First() == "encode")
+                    ? args.Skip(1).ToArray()
+                    : args;
+        }
+
+        private static Func<string, string> GetTranslateAction(string[] args)
+        {
+            var translator = new Translator();
+
+            if (args?.FirstOrDefault() == "decode")
+            {
+                return translator.Decode;
+            }
+
+            return translator.Encode;
         }
     }
 }
